@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Quad Solver</string>
+    <string name="title_activity_result">activity_result</string>
+</resources>

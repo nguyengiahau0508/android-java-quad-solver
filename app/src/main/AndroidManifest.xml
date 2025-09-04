@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ResultActivity"/>
+        <activity android:name=".InputCoefficientActivity"/>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.quadsolver;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -9,14 +10,19 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ActivityResultLauncher<Intent> inputCoefficientLaucher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonSubmit = findViewById(R.id.button_submit);
         Button buttonReset = findViewById(R.id.button_reset);
+        Button buttonCoefficient = findViewById(R.id.button_coefficient);
 
         EditText inputA = findViewById(R.id.input_a);
         EditText inputB = findViewById(R.id.input_b);
@@ -90,5 +97,38 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        inputCoefficientLaucher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            String a = data.getStringExtra("a");
+                            String b = data.getStringExtra("b");
+                            String c = data.getStringExtra("c");
+
+                            Toast.makeText(this,
+                                    "Nhận được: a=" + a + ", b=" + b + ", c=" + c,
+                                    Toast.LENGTH_LONG).show();
+
+                            inputA.setText(a);
+                            inputB.setText(b);
+                            inputC.setText(c);
+
+                        }
+                    }
+                }
+        );
+
+        buttonCoefficient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, InputCoefficientActivity.class);
+                inputCoefficientLaucher.launch(intent);
+            }
+        });
+
+
     }
 }
